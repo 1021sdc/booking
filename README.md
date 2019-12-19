@@ -42,7 +42,7 @@ npm run build
 
 In './booking' directory, there is a dockerFile for building the image of database
 
-When you try to deploy, run 
+When you try to deploy, run
 ```sh
 docker-compose up
 ```
@@ -65,7 +65,7 @@ From within the root directory:
 npm install
 
 
-// to run the server (using nodemon), if you try to deploy, 
+// to run the server (using nodemon), if you try to deploy,
 // please change this script to use node in package.json
 npm start
 
@@ -79,3 +79,17 @@ npm react-dev
 npm run seed
 ```
 
+### API Routes
+
+GET:
+- ('/room')
+- ('/booking')
+
+POST:
+- ('/booking')
+
+PUT:
+- ('/booking')
+
+DELETE:
+- ('/booking')
