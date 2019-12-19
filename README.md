@@ -82,14 +82,19 @@ npm run seed
 ### API Routes
 
 GET:
+// serves up one room's information object
 - ('/room')
+// serves up an information object with all booking's for a specific room
 - ('/booking')
 
 POST:
+// accepts information object to be added to the list of bookings
 - ('/booking')
 
 PUT:
+// updates a booking with the given id
 - ('/booking')
 
 DELETE:
+// deletes a booking with a given id
 - ('/booking')
