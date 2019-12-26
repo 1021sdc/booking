@@ -53,7 +53,7 @@ function isNotOverlapWithOtherBookingDates(roomId, startDate, endDate) {
 }
 
 function randomCheckInOutOnRoom(roomList, roomId) {
-  const room = roomList[`${roomId}`];
+  const room = roomList[`${roomId}`]; // get room from database
   let startDate = moment(randomDate(moment().toDate(), moment().add(2, 'months').toDate())).startOf('day').toDate();
   let endDate = moment(startDate).add(randomIntFromInterval(room.min_night, room.max_night), 'days').startOf('day').toDate();
   let trial = 0;
@@ -115,10 +115,10 @@ function generateRandomBookings(num, roomList) {
 }
 
 function createBookingData(num) {
-  console.log('create booking data ', num)
+  // console.log('create booking data of: ', num);
 
-  client
-    .query('SELECT * from rooms').then((data) => {
+  return client
+    .query(`SELECT * FROM rooms WHERE id BETWEEN 1 AND 50`).then((data) => {
       return data.rows;
     }).then((rooms) => {
       generateRandomBookings(num, rooms);
@@ -128,24 +128,52 @@ function createBookingData(num) {
         bookings[i].roomId += 1;
       }
 
-      bookings.forEach((data) => {
-        const text = 'INSERT INTO bookings (email, guests, check_in, check_out, createdAt, roomId) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-        const values = [data.email, data.guests, data.check_in, data.check_out, data.createdAt, data.roomId];
+      // bookings.forEach((data) => {
+      //   // const text = 'INSERT INTO bookings (email, guests, check_in, check_out, createdAt, roomId) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+      //   const values = {data.email, data.guests, data.check_in, data.check_out, data.createdAt, data.roomId};
 
-        client.query(text, values)
-          .then(() => {
-            // eslint-disable-next-line no-console
-            console.log('success for booking ', values);
-          })
-          .catch((err) => {
-            throw err;
-          });
+      //   // client.query(text, values)
+      //   //   .then(() => {
+      //   //     // eslint-disable-next-line no-console
+      //   //     console.log('success for booking ', values);
+      //   //   })
+      //   //   .catch((err) => {
+      //   //     throw err;
+      //   //   });
+      //   console.log(data);
+      //   console.log('values: ', values);
+      // });
+
+      const newArr = bookings.map((data) => {
+        return {
+          email: data.email,
+          guests: data.guests,
+          check_in: data.check_in,
+          check_out: data.check_out,
+          createdAt: data.createdAt,
+          roomId: data.roomId,
+        };
       });
+
+      // console.log(newArr);
+
+      return newArr;
     }).catch((errFetchData) => {
       console.log('error to fetch data ', errFetchData);
     });
 }
 
 client.connect(() => {
-  createBookingData(50050);
+
+  for (let j = 0; j < 1; j += 1) {
+    createBookingData(10000000).then((result) => {
+      console.log('hello result ', result);
+
+      const writer = fs.createWriteStream(`../dataTwo/bookings${j}.json`);
+
+      writer.write(JSON.stringify(result));
+
+      // fs.writeFileSync(`../dataTwo/bookings${j}.json`, JSON.stringify(result));
+    });
+  }
 });
