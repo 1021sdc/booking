@@ -13,8 +13,8 @@ const client = new Client({
   port: 5432,
 });
 
-const bookings = [];
-const bookingsByRoom = {};
+let bookings = [];
+let bookingsByRoom = {};
 
 // min and max included
 function randomIntFromInterval(min, max) {
@@ -99,6 +99,7 @@ function generateRandomBooking(roomList) {
   return booking;
 }
 
+
 function generateRandomBookings(num, roomList) {
   let book;
   for (let i = 0; i < num; i += 1) {
@@ -114,15 +115,15 @@ function generateRandomBookings(num, roomList) {
   }
 }
 
-function createBookingData(num) {
+function createBookingData(num, start, end) {
   // console.log('create booking data of: ', num);
 
   return client
-    .query(`SELECT * FROM rooms WHERE id BETWEEN 1 AND 50`).then((data) => {
+    .query(`SELECT * FROM rooms WHERE id BETWEEN ${start} AND ${end}`).then((data) => {
       return data.rows;
     }).then((rooms) => {
       generateRandomBookings(num, rooms);
-
+      console.log('bookings ', bookings.length)
       for (let i = 0; i < bookings.length; i += 1) {
         bookings[i].guests = JSON.stringify(bookings[i].guests);
         bookings[i].roomId += 1;
@@ -165,15 +166,17 @@ function createBookingData(num) {
 
 client.connect(() => {
 
-  for (let j = 0; j < 1; j += 1) {
-    createBookingData(10000000).then((result) => {
-      console.log('hello result ', result);
+  // for (let j = 0; j < 1; j += 1) {
 
-      const writer = fs.createWriteStream(`../dataTwo/bookings${j}.json`);
+  async function seed () {
+    for (let i = 0; i <= 50; i++) {
+      const result = await createBookingData(200000, i * 200000, (i + 1) * 200000);
+      fs.writeFileSync(`../dataTwo/bookings${i}.json`, JSON.stringify(result));
 
-      writer.write(JSON.stringify(result));
-
-      // fs.writeFileSync(`../dataTwo/bookings${j}.json`, JSON.stringify(result));
-    });
+      bookings = [];
+      bookingsByRoom = {};
+    }
   }
+
+  seed();
 });
