@@ -111,24 +111,31 @@ fs.readdir('../data', (err, items) => {
   async function store() {
     for (let i = 0; i < items.length; i += 1) {
       const result = fs.readFileSync(`../data/${items[i]}`, 'utf-8');
-      console.log('items is ', items[i]);
+      // console.log('items is ', items[i]);
+      try {
+        const parsedResult = JSON.parse(result);
 
-      const parsedResult = JSON.parse(result);
+        for (let j = 0; j < parsedResult.length; j += 1) {
+          parsedResult[j].id = count;
 
-      for (let j = 0; j < parsedResult.length; j += 1) {
-        parsedResult[j].id = count;
+          const randomNum = randomIntFromInterval(0, 5);
+          parsedResult[j].bookings = generateRandomBookings(randomNum, parsedResult[j]);
+          count += 1;
 
-        const randomNum = randomIntFromInterval(0, 5);
-        parsedResult[j].bookings = generateRandomBookings(randomNum, parsedResult[j]);
-        count += 1;
+          bookingsByRoom = {};
 
-        bookingsByRoom = {};
-
-        console.log('my room ', parsedResult[j]);
+          // console.log('my room ', parsedResult[j]);
+        }
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          const saveToDb = await Room.create(parsedResult);
+          console.log('save to db ', saveToDb);
+        } catch (error) {
+          console.log('Saving to db error happend - ', error);
+        }
+      } catch (exception) {
+        console.log('Incorrect json format for file - ', items[i]);
       }
-      // eslint-disable-next-line no-await-in-loop
-      const saveToDb = await Room.create(parsedResult);
-      console.log('save to db ', saveToDb);
     }
     console.log('i am done!');
   }
