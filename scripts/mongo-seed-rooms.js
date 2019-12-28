@@ -2,11 +2,8 @@
 const fs = require('fs');
 const faker = require('faker');
 const moment = require('moment');
-// const { Room } = require('./mongo-connection.js');
+const { Room } = require('./mongo-connection.js');
 
-// call the function what will return array (array can be empty or up to 5 items of bookings)
-
-// let bookings = [];
 let bookingsByRoom = {};
 
 function randomIntFromInterval(min, max) {
@@ -66,8 +63,6 @@ function randomCheckInOutOnRoom(room, roomId) {
 }
 
 function generateRandomBooking(room) {
-  // const roomId = randomIntFromInterval(0, roomList.length - 1);
-  // const room = roomList[roomId];
   const roomId = room.id;
 
   const randomCheckInOutDates = randomCheckInOutOnRoom(room, roomId);
@@ -97,7 +92,7 @@ function generateRandomBookings(num, room) {
   let book;
   for (let i = 0; i < num; i += 1) {
     book = generateRandomBooking(room);
-    // console.log(book);
+
     if (book !== null) {
       bookings.push(book);
       if (bookingsByRoom[`${book.roomId}`] === undefined) {
@@ -113,77 +108,29 @@ function generateRandomBookings(num, room) {
 let count = 0;
 
 fs.readdir('../data', (err, items) => {
-
   async function store() {
     for (let i = 0; i < items.length; i += 1) {
       const result = fs.readFileSync(`../data/${items[i]}`, 'utf-8');
       console.log('items is ', items[i]);
 
-      const parsedResult = JSON.parse(result); // [{}, {}, {}, {} ....] i = 0
+      const parsedResult = JSON.parse(result);
 
-      for (let j = 0; j < parsedResult.length; j+= 1) {
+      for (let j = 0; j < parsedResult.length; j += 1) {
         parsedResult[j].id = count;
-        // parsedResult[j].bookings = []; // [{id: 0}, {}, {}, {}, {}]
+
         const randomNum = randomIntFromInterval(0, 5);
         parsedResult[j].bookings = generateRandomBookings(randomNum, parsedResult[j]);
         count += 1;
 
-        // here maybe i need to set to empty bookingsByRoom {}
         bookingsByRoom = {};
 
         console.log('my room ', parsedResult[j]);
       }
-
-      // const saveToDb = await Room.create(parsedResult)
-      // console.log('save to db ', saveToDb);
-
-      // Room.create(parsedResult)
-      //   .then((data) => {
-      //     console.log('saved');
-
-      //     // process.exit();
-      //   })
-      //   .catch(error => console.log(error));
+      // eslint-disable-next-line no-await-in-loop
+      const saveToDb = await Room.create(parsedResult);
+      console.log('save to db ', saveToDb);
     }
     console.log('i am done!');
   }
   store();
 });
-
-// fs.readdir('../data', (err, items) => {
-//   for (let i = 0; i < items.length; i += 1) {
-//     const stream = fs.createReadStream(`../data/${items[i]}`, { flags: 'r', encoding: 'utf-8' });
-//     let buf = '';
-
-//     stream.on('data', (d) => {
-//       // console.log('boom ', d);
-//       buf += d.toString(); // when data is read, stash it in a string buffer
-//     });
-
-//     stream.on('end', () => {
-//       const parsedData = JSON.parse(buf);
-//       // console.log(parsedData);
-//       // const mappedArr = parsedData.map((el, idx) => {
-
-//       //   return Object.assign(el, {
-//       //     id: idx,
-//       //     bookings: [],
-//       //   });
-//       // })
-//       for (let j = 0; j < parsedData.length; j += 1) {
-//         parsedData[j].id = j;
-//         parsedData[j].bookings = [];
-//       }
-//       // console.log(parsedData);
-
-//       // Room.create(parsedData).then(() => console.log('saved')).catch(error => console.log(error));
-//       Room.create(parsedData)
-//         .then(() => {
-//           console.log('saved');
-
-//           process.exit();
-//         })
-//         .catch(error => console.log(error));
-//     });
-//   }
-// });

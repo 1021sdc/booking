@@ -1,9 +1,9 @@
+/* eslint-disable no-await-in-loop */
 const faker = require('faker');
 const moment = require('moment');
 /* eslint-disable no-console */
 const { Client } = require('pg');
 const fs = require('fs');
-// const data = require('../data/rooms.json');
 
 const client = new Client({
   user: 'inna',
@@ -104,7 +104,6 @@ function generateRandomBookings(num, roomList) {
   let book;
   for (let i = 0; i < num; i += 1) {
     book = generateRandomBooking(roomList);
-    // console.log(book);
     if (book !== null) {
       bookings.push(book);
       if (bookingsByRoom[`${book.roomId}`] === undefined) {
@@ -116,8 +115,6 @@ function generateRandomBookings(num, roomList) {
 }
 
 function createBookingData(num, start, end) {
-  // console.log('create booking data of: ', num);
-
   return client
     .query(`SELECT * FROM rooms WHERE id BETWEEN ${start} AND ${end}`).then((data) => {
       return data.rows;
@@ -128,22 +125,6 @@ function createBookingData(num, start, end) {
         bookings[i].guests = JSON.stringify(bookings[i].guests);
         bookings[i].roomId += 1;
       }
-
-      // bookings.forEach((data) => {
-      //   // const text = 'INSERT INTO bookings (email, guests, check_in, check_out, createdAt, roomId) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-      //   const values = {data.email, data.guests, data.check_in, data.check_out, data.createdAt, data.roomId};
-
-      //   // client.query(text, values)
-      //   //   .then(() => {
-      //   //     // eslint-disable-next-line no-console
-      //   //     console.log('success for booking ', values);
-      //   //   })
-      //   //   .catch((err) => {
-      //   //     throw err;
-      //   //   });
-      //   console.log(data);
-      //   console.log('values: ', values);
-      // });
 
       const newArr = bookings.map((data) => {
         return {
@@ -156,8 +137,6 @@ function createBookingData(num, start, end) {
         };
       });
 
-      // console.log(newArr);
-
       return newArr;
     }).catch((errFetchData) => {
       console.log('error to fetch data ', errFetchData);
@@ -165,11 +144,8 @@ function createBookingData(num, start, end) {
 }
 
 client.connect(() => {
-
-  // for (let j = 0; j < 1; j += 1) {
-
-  async function seed () {
-    for (let i = 0; i <= 50; i++) {
+  async function seed() {
+    for (let i = 0; i <= 50; i += 1) {
       const result = await createBookingData(200000, i * 200000, (i + 1) * 200000);
       fs.writeFileSync(`../dataTwo/bookings${i}.json`, JSON.stringify(result));
 

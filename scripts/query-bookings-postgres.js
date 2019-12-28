@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 const fs = require('fs');
 const { Client } = require('pg');
 
@@ -19,7 +21,6 @@ client.connect(() => {
       const text = 'INSERT INTO bookings (email, guests, check_in, check_out, createdAt, roomId) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
       const values = [booking.email, booking.guests, booking.check_in, booking.check_out, booking.createdAt, booking.roomId];
       client.query(text, values).then(() => {
-        // console.log('saved to db');
         resolve();
       }).catch((err) => {
         console.log('err is ', err);
@@ -29,11 +30,7 @@ client.connect(() => {
   }
 
   fs.readdir('../dataTwo', (err, items) => {
-
-    // let count = 0;
-
     setInterval(() => {
-      // console.log(items[0]);
       const promises = [];
       const rawData = fs.readFileSync(`../dataTwo/${items[0]}`);
       const data = JSON.parse(rawData);
@@ -44,7 +41,6 @@ client.connect(() => {
       Promise.all(promises)
         .then(() => {
           console.log('saved');
-          // count += 1;
         }).catch(() => {
           console.log('something went wrong');
           process.exit();

@@ -26,7 +26,6 @@ function generateRandomRooms(num) {
   const rooms = [];
 
   for (let i = 0; i < num; i += 1) {
-
     const room = {
       roomname: faker.name.findName()
         + roomNameAppendix[randomIntFromInterval(0, roomNameAppendix.length - 1)],
@@ -55,22 +54,3 @@ for (let j = 0; j < 500; j += 1) {
 
   fs.writeFileSync(`../data/rooms${j}.json`, result);
 }
-
-// function fileWriteSync(filepath) {
-//   const fd = fs.openSync(filepath, 'w');
-//   for (let i = 0; i < 20 ; i += 1) {
-//     let data = JSON.stringify(generateRandomRooms(500000));
-//     fs.writeSync(fd, data);
-//   }
-
-//   fs.closeSync(fd);
-// }
-
-// fileWriteSync('../data/rooms.json');
-// fs.writeFile(`../data/rooms${j}.json`, result, (error) => {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log('Data saved!');
-//   }
-// });
