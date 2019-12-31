@@ -57,14 +57,10 @@ app.post('/booking', (req, res) => {
     check_out: new Date(req.body.check_out),
     createdAt: new Date(req.body.createdAt),
   };
-  // console.log(new Date())
-
-  // console.log('Data: ', data);
 
   const text = 'INSERT INTO bookings (email, guests, check_in, check_out, createdAt, roomId, updatedAt) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
-  const values = [req.body.email, req.body.guests, new Date(req.body.check_in), new Date(req.body.check_out), new Date(req.body.createdAt), req.body.roomId, new Date()];
+  const values = [data.email, data.guests, new Date(data.check_in), new Date(data.check_out), new Date(data.createdAt), data.roomId, new Date()];
   pool.query(text, values, (error, response) => {
-
     if (error) {
       console.log(error);
       res.sendStatus(500);
@@ -73,7 +69,6 @@ app.post('/booking', (req, res) => {
     console.log('Saved booking to db.', response);
     res.send();
   });
-  // res.send();
 });
 
 app.listen(PORT, () => {
