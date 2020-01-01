@@ -6,3 +6,5 @@ coverage/lcov-report/index.html
 coverage
 data
 dataTwo
+newrelic.js
+server/newrelic_agent.log

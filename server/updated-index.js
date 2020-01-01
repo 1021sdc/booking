@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
+const nr = require('newrelic');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
