@@ -18,8 +18,6 @@ app.use(
 );
 
 app.get('/room', (req, res) => {
-  // console.log('room', req.query.id);
-
   const roomQuery = `SELECT * FROM rooms WHERE id=${req.query.id}`;
   pool.query(roomQuery, (error, response) => {
     if (error) {
@@ -27,14 +25,11 @@ app.get('/room', (req, res) => {
       res.sendStatus(500);
     }
 
-    // console.log('room: ', response.rows[0]);
     res.send(response.rows[0]);
   });
 });
 
 app.get('/booking', (req, res) => {
-  // console.log('booking', req.query.id);
-
   const bookingQuery = `SELECT * FROM bookings WHERE id=${req.query.id}`;
   pool.query(bookingQuery, (error, response) => {
     if (error) {
@@ -42,14 +37,11 @@ app.get('/booking', (req, res) => {
       res.sendStatus(500);
     }
 
-    // console.log('booking: ', response.rows[0]);
     res.send(response.rows);
   });
 });
 
 app.post('/booking', (req, res) => {
-  console.log('Post booking: ', req.body);
-
   const data = {
     roomId: req.body.roomId,
     email: req.body.email,
