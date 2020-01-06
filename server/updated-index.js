@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
+// eslint-disable-next-line no-unused-vars
 const nr = require('newrelic');
 const express = require('express');
 const path = require('path');
