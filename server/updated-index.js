@@ -23,10 +23,14 @@ app.get('/room', (req, res) => {
   pool.query(roomQuery, (error, response) => {
     if (error) {
       console.log(error);
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
 
-    res.send(response.rows[0]);
+    if (response && response.rows && response.rows.length !== 0) {
+      res.send(response.rows[0]);
+    } else {
+      res.sendStatus(404);
+    }
   });
 });
 
@@ -35,10 +39,14 @@ app.get('/booking', (req, res) => {
   pool.query(bookingQuery, (error, response) => {
     if (error) {
       console.log(error);
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
 
-    res.send(response.rows);
+    if (response && response.rows && response.rows.length !== 0) {
+      res.send(response.rows);
+    } else {
+      res.sendStatus(404);
+    }
   });
 });
 

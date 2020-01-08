@@ -1,10 +1,3 @@
-# FROM node:latest
-# WORKDIR /app
-# COPY . /app
-# RUN npm install
-# CMD node server/updated-index.js && webpack --config webpack.config.prod.js
-# EXPOSE 3001
-
 # What image do you want to start building on?
 FROM node:latest
 
@@ -16,6 +9,8 @@ WORKDIR /src/app
 
 # What source code do you what to copy, and where to put it?
 COPY . /src/app
+
+ENV NODE_ENV=production
 
 # Does your app have any dependencies that should be installed?
 RUN npm install
