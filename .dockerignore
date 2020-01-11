@@ -10,3 +10,16 @@ my_test_result.csv
 db/index.js
 db/schema.sql
 server/index.js
+webpack.config.js
+STYLE-GUIDE.md
+README.md
+script.js
+jest.config.js
+docker-compose.yml
+booking
+scripts
+.eslintignore
+.eslintrc.js
+.gitignore
+.cirleci
+test
