@@ -1,21 +1,21 @@
-# Airbnb-booking
+# Better Homes-booking
 
-> Airbnb Booking module
+> Better Homes Booking module
 
 ## Related Projects
 
-  - https://github.com/hacker-home/Airbnb-more-homes
-  - https://github.com/hacker-home/Airbnb-info
-  - https://github.com/hacker-home/Airbnb-reviews
-  - https://github.com/hacker-home/Airbnb-photos
+  - https://github.com/1021sdc/More-homes
+  - https://github.com/1021sdc/better-info
+  - https://github.com/1021sdc/reviews
+  - https://github.com/1021sdc/better-photos-and-hackers
 
 My proxy server is here!
 
-https://github.com/hacker-home/Airbnb-booking-proxy
+https://github.com/1021sdc/inna-proxy
 
 ## Usage
 
-> This module is a booking portal on Airbnb listing page
+> This module is a booking portal on Better Homes listing page
 
 If you have any questions or feedback, please feel free to contact me!
 
