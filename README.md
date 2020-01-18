@@ -2,8 +2,7 @@
 
 > Better Homes Booking module
 
-
-![](ZHomeReadme.png)
+![](BookingReadMe.png)
 
 ## Related Projects
 
